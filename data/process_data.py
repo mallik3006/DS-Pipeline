@@ -38,7 +38,7 @@ def clean_data(df):
     '''
     df = df.drop_duplicates()
     df = df.dropna(subset=df.iloc[:, 4:].columns, how='any')
-    df = df.loc[df['related'] != 2]
+    df.related.replace(2, 1,inplace=True)
     
     return  df
 
@@ -48,7 +48,7 @@ def save_data(df, database_filename):
     Save the cleaned dataframe to a sqlite table
     '''
     engine = create_engine('sqlite:///' + database_filename)
-    df.to_sql('MessageTable', engine, index=False)
+    df.to_sql('MessageTable', engine, index=False, if_exists='replace')
     
     
 def main():
