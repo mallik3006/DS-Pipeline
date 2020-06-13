@@ -1,16 +1,16 @@
 # Data Scientist - Nanodegree
 
-## Disaster Response Pipeline
+## Disaster Response Pipeline Project
 
 
 ### Introduction
 
-The aim of this project  to analyze disaster data from Figure Eight to build a model for an API that classifies disaster messages. The data set contains real messages that were sent during disaster events. A machine learning pipeline will be developed to categorize these events so that can be sent as messages to an appropriate disaster relief agency. A web app will also be developed where an emergency worker can input a new message and get classification results in several categories. The web app will also display visualizations of the data. 
+The aim of this project  to analyze disaster data from Figure Eight to build a model for an API that classifies disaster messages. The data set contains real messages that were sent during disaster events. A machine learning pipeline will be developed to categorize these events which can be sent as messages to an appropriate disaster relief agency. A web app will also be developed where an emergency worker can input a new message and get classification results in several categories. The web app will also display visualizations of the data. 
 
 
-### Pre-requisites
+### Prerequisites
 
-Following are the main libraries utilised:
+Following are the main libraries utilized:
 
 * `nltk` 
 * `sqlalchemy` 
@@ -21,7 +21,7 @@ Following are the main libraries utilised:
 
 File _data/process_data.py_ contains following functions:
 
-- Load the datsetss - `messages.csv` and `categories.csv` 
+- Load the datsets - `messages.csv` and `categories.csv` 
 - Merge the two datasets and derive the categories
 - Clean the data
 - Store the final cleaned dataste in a **SQLite database**
