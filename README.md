@@ -48,8 +48,6 @@ File _models/train_classifier.py_ contains following functions:
    `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
 
 * Run the command in the app's directory to run your web app - `python run.py`
- 
-* Now, open another Terminal Window and type - `env|grep WORK`
 
 * Go to http://0.0.0.0:3001/
 
