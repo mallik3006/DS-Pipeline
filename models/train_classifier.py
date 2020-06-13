@@ -1,6 +1,6 @@
 import sys
 import nltk
-nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger'])
+nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger', 'stopwords'])
 
 import re
 import numpy as np
@@ -8,6 +8,7 @@ import pandas as pd
 from pickle import dump
 from sqlalchemy import create_engine
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
 from sklearn.metrics import confusion_matrix
@@ -37,10 +38,17 @@ def load_data(database_filepath):
 
 def tokenize(text):
     '''
-    Tokenizes the text message
+    Input: Raw Text
+    Returns: Tokenizes the text message
     '''
+    text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower())
+    
     tokens = word_tokenize(text)
+    
+     # lemmatize, remove stopwords   
+    stop_words = stopwords.words("english")
     lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words]
 
     clean_tokens = []
     for tok in tokens:
@@ -56,10 +64,11 @@ def build_model():
         - CountVectorizer
         - TfidfTransformer
         - MultiOutputClassifier(RandomForestClassifier)
+    Returns: rained and Tuned Model
     '''
     pipeline = Pipeline([('vect', CountVectorizer(tokenizer=tokenize)),
                     ('tfidf', TfidfTransformer()),
-                    ('clf', MultiOutputClassifier(RandomForestClassifier(n_jobs=-1)))
+                    ('clf', MultiOutputClassifier(RandomForestClassifier(n_estimators=30)))
                     ])
     
     parameters = {'vect__ngram_range': ((1, 1), (1, 2)),
@@ -74,7 +83,8 @@ def build_model():
 
 def evaluate_model(model, X_test, Y_test, category_names):
     '''
-    Evaluates the model and prints the classification_report by category
+    Input: Trained model, Test data and the category names
+    Output: Evaluation of the model and prints the classification_report by category
     '''
     y_pred = model.predict(X_test)
     print("Labels:", np.unique(y_pred))
@@ -87,7 +97,8 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 def save_model(model, model_filepath):
     '''
-    Save the final model to a pickle fil
+    Input: Final trained model and the path.
+    Output: Save the final model to a pickle fil
     '''
     dump(model, open(model_filepath, 'wb'))        
     
@@ -104,6 +115,7 @@ def main():
         
         print('Training model...')
         model.fit(X_train, Y_train)
+        print(model.best_estimator_.named_steps)
         
         print('Evaluating model...')
         evaluate_model(model, X_test, Y_test, category_names)
